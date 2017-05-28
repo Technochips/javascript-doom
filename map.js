@@ -32,10 +32,10 @@ class Vertex
 }
 class Maps
 {
-	constructor(things, lindefs, vertexes)
+	constructor(things, linedefs, vertexes)
 	{
 		this.things = things;
-		this.lindefs = lindefs;
+		this.linedefs = linedefs;
 		this.vertexes = vertexes;
 	}
 }
