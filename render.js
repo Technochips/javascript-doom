@@ -13,6 +13,11 @@ class Render
 		this.graph.fillStyle = "#FFFFFF";
 		this.graph.font = "12px sans-serif";
 		this.graph.fillText("Waiting game to draw...", 5, 15);
+
+		this.camera_x = 0;
+		this.camera_y = 0;
+
+		this.follow = true;
 	}
 	draw(map)
 	{
@@ -22,6 +27,30 @@ class Render
 		this.graph.restore();
 		this.graph.fillStyle = "#000000";
 		this.graph.fillRect(0, 0, this.width, this.height);
+		for(var i = 0; i < map.things.length; i++)
+		{
+			var thing = map.things[i];
+
+			if(this.follow)
+			{
+				this.camera_x = thing.x;
+				this.camera_y = thing.y;
+			}
+
+			if(thing.type = 1)
+			{
+				this.graph.strokeStyle = "#FFFFFF";
+				this.graph.beginPath();
+				this.graph.moveTo(thing.x - this.camera_x + (this.width / 2), thing.y + 2 - this.camera_y + (this.height / 2));
+				this.graph.lineTo(thing.x - this.camera_x + (this.width / 2), thing.y - 2 - this.camera_y + (this.height / 2));
+				this.graph.stroke();
+				this.graph.beginPath();
+				this.graph.moveTo(thing.x + 2 - this.camera_x + (this.width / 2), thing.y - this.camera_y + (this.height / 2));
+				this.graph.lineTo(thing.x - 2 - this.camera_x + (this.width / 2), thing.y - this.camera_y + (this.height / 2));
+				this.graph.stroke();
+			}
+		}
+
 		for(var i = 0; i < map.linedefs.length; i++)
 		{
 			var linedef = map.linedefs[i];
@@ -29,29 +58,9 @@ class Render
 			var vert2 = map.vertexes[linedef.vert2];
 			this.graph.strokeStyle = "#FF0000";
 			this.graph.beginPath();
-			this.graph.moveTo(vert1.x, vert1.y);
-			this.graph.lineTo(vert2.x, vert2.y);
+			this.graph.moveTo(vert1.x - this.camera_x + (this.width / 2), vert1.y - this.camera_y + (this.height / 2));
+			this.graph.lineTo(vert2.x - this.camera_x + (this.width / 2), vert2.y - this.camera_y + (this.height / 2));
 			this.graph.stroke();
-		}
-		for(var i = 0; i < map.things.length; i++)
-		{
-			var thing = map.things[i];
-			if(thing.type = 1)
-			{
-				this.graph.strokeStyle = "#FFFFFF";
-				this.graph.beginPath();
-				this.graph.moveTo(thing.x, thing.y + 2);
-				this.graph.lineTo(thing.x, thing.y - 2);
-				this.graph.stroke();
-				this.graph.beginPath();
-				this.graph.moveTo(thing.x + 2, thing.y);
-				this.graph.lineTo(thing.x - 2, thing.y);
-				this.graph.stroke();
-				if(map.things[i].direction >= 359)
-					map.things[i].direction = 0;
-				else
-					map.things[i].direction++;
-			}
 		}
 	}
 }
